@@ -14,8 +14,10 @@ namespace DynaReport
 
             var app = builder.Build();
             app?.UseDefaultEndPoint(configuration: builder.Configuration);
-            app?.UseAuthentication();
-            app?.UseAuthorization();
+            app?.UseEndpoints(endpoints =>
+            {
+                endpoints?.MapControllers();
+            });
             app?.Run();
         }
     }
