@@ -1,0 +1,250 @@
+﻿@model DynaReport.ViewModels.DetailsWithListReportViewModel
+@{
+    Layout = null;
+    int listLimit = Model?.ListLimit ?? 5;
+    bool isArabic = Model?.Lang == "ar";
+    var dir = isArabic ? "rtl" : "ltr";
+    var lang = isArabic ? "ar" : "en";
+}
+
+<!DOCTYPE html>
+<html lang="@lang" dir="@dir">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(Model?.ReportTitle ?? "Details with List Report")</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: @(isArabic ? "'Cairo'" : "'Roboto'"), sans-serif;
+            line-height: 1.6;
+            direction: @dir;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+        }
+
+        .header {
+            background: #1a3c73;
+            color: #fff;
+            padding: 25px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 3px solid #1e40af;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            margin: 10px 0 0;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .detail-section {
+            padding-top: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .detail-section h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a3c73;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .detail-label {
+            width: 250px;
+            font-weight: 600;
+            color: #1a3c73;
+            padding: @(isArabic ? "0 0 0 10px" : "0 10px 0 0");
+            text-align: @(isArabic ? "right" : "left");
+        }
+
+        .detail-value {
+            flex: 1;
+            color: #4b5563;
+            font-size: 15px;
+            text-align: @(isArabic ? "right" : "left");
+        }
+
+        .table-section {
+            padding-top: 25px;
+        }
+
+        .table-section h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a3c73;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #fff;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: @(isArabic ? "right" : "left");
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #f1f3f5;
+            font-weight: 600;
+            color: #1a3c73;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        td {
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        tr:hover {
+            background-color: #f1f3f5;
+            transition: background-color 0.2s ease;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+            font-size: 16px;
+            font-style: italic;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .footer {
+            margin-top: 25px;
+            padding: 15px;
+            text-align: @(isArabic ? "left" : "right");
+            font-size: 13px;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer .official-notice {
+            font-weight: 600;
+            color: #1a3c73;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>@(Model?.ReportTitle ?? (isArabic ? "تقرير التفاصيل مع القائمة" : "Details with List Report"))</h1>
+            @if (Model?.Items != null)
+            {
+                <p>@(isArabic ? "إجمالي العناصر:" : "Total Items:") @Model.Items.Count()</p>
+            }
+        </div>
+
+        <div class="detail-section">
+            <h2>@(isArabic ? "التفاصيل" : "Details")</h2>
+            @if (Model?.Details != null && Model.Details.Any())
+            {
+                foreach (var detail in Model.Details)
+                {
+                    <div class="detail-row">
+                        <div class="detail-label">@detail.Key:</div>
+                        <div class="detail-value">@(detail.Value?.ToString() ?? (isArabic ? "غير متاح" : "N/A"))</div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="no-data">@(isArabic ? "لا توجد تفاصيل متاحة" : "No details available")</div>
+            }
+        </div>
+
+        <div class="table-section">
+            <h2>@(isArabic ? "القائمة" : "List")</h2>
+            @if (Model?.Items != null && Model.Items.Any())
+            {
+                var firstItem = Model.Items.FirstOrDefault();
+                if (firstItem != null)
+                {
+                    <table>
+                        <thead>
+                            <tr>
+                                @foreach (var prop in firstItem.GetType().GetProperties())
+                                {
+                                    <th>@prop.Name</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items.Take(listLimit))
+                            {
+                                <tr>
+                                    @foreach (var prop in item.GetType().GetProperties())
+                                    {
+                                        <td>@(prop.GetValue(item)?.ToString() ?? (isArabic ? "غير متاح" : "N/A"))</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+            else
+            {
+                <div class="no-data">@(isArabic ? "لا توجد عناصر متاحة" : "No items available")</div>
+            }
+        </div>
+
+        <div class="footer">
+            <p class="official-notice">@(isArabic ? "هذا المستند رسمي ويعتبر لاغيًا عند التغيير عليه." : "This document is official and considered void upon modification.")</p>
+        </div>
+    </div>
+</body>
+</html>
