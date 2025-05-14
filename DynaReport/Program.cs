@@ -1,4 +1,5 @@
 using DynaReport.Extensions;
+using DynaReport.Utilities;
 
 namespace DynaReport
 {
@@ -6,6 +7,7 @@ namespace DynaReport
     {
         public static void Main(string[] args)
         {
+            FileUtility.CopyDllToBinFolder();
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

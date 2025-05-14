@@ -5,6 +5,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup> 
+	<Target Name="CopyDllAfterPublish" AfterTargets="Publish">
+  <ItemGroup>
+    <MyFiles Include="$(ProjectDir)dll\libwkhtmltox.dll" />
+  </ItemGroup>
+  <Copy SourceFiles="@(MyFiles)" DestinationFolder="$(PublishDir)" />
+</Target>
   <ItemGroup>
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
