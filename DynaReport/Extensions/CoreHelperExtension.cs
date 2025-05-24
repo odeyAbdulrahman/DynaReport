@@ -16,6 +16,7 @@ public static class CoreHelperExtension
             options.ViewLocationFormats.Add("wwwroot/Templates/{0}.cshtml");
         });
         services.AddSingleton(serviceType: typeof(IConverter), implementationInstance: new SynchronizedConverter(new PdfTools()));
+        services.AddScoped<IChartRenderer, ChartRenderer>();
         services.AddScoped<ITemplateRenderer, TemplateRenderer>();
         services.AddScoped<IReportGenerator, ReportGenerator>();
 

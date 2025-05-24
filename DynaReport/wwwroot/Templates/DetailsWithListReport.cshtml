@@ -12,7 +12,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@(Model?.ReportTitle ?? "Details with List Report")</title>
+    <title>@(Model?.ReportTitle ?? (isArabic ? "تقرير رسمي" : "Official Report"))</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -22,170 +22,199 @@
         }
 
         body {
-            font-family: @(isArabic ? "'Cairo'" : "'Roboto'"), sans-serif;
-            line-height: 1.6;
+            font-family: @(isArabic ? "'Cairo', sans-serif" : "'Roboto', sans-serif");
+            line-height: 1.5;
             direction: @dir;
+            background-color: #ffffff;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0C8.954 0 0 8.954 0 20s8.954 20 20 20 20-8.954 20-20S31.046 0 20 0zm0 4c8.837 0 16 7.163 16 16s-7.163 16-16 16S4 28.837 4 20 11.163 4 20 4z' fill='%23B89B80' fill-opacity='0.08'/%3E%3C/svg%3E"), url("https://dma.shj.ae/images/back/back.svg");
+            background-repeat: repeat;
+            background-attachment: fixed;
+            background-size: 40px 40px, auto;
+            position: relative;
         }
+
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(255, 255, 255, 0.97);
+                z-index: -1;
+            }
 
         .container {
             max-width: 1100px;
-            margin: 40px auto;
-            background: #fff;
-            padding: 30px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border: 1px solid #EDE0D1; /* Original border color */
         }
 
         .header {
-            background: #1a3c73;
-            color: #fff;
-            padding: 25px;
+            background: #ffffff; /* Original primary color */
+            color: black;
+            padding: 20px;
             text-align: center;
-            border-radius: 8px 8px 0 0;
-            border-bottom: 3px solid #1e40af;
+            border-bottom: 2px solid #B89B80; /* Original border color */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            width: 250px;
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #FFFFFF; /* White border for clarity */
+            background: rgba(255, 255, 255, 0.2); /* Subtle background for contrast */
+            padding: 5px;
+            border-radius: 4px;
+            object-fit: contain;
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 700;
             margin: 0;
-            letter-spacing: 0.5px;
+            letter-spacing: @(isArabic ? "0.2px" : "0.5px");
         }
 
         .header p {
             font-size: 16px;
-            margin: 10px 0 0;
+            margin: 5px 0 0;
             font-weight: 400;
-            opacity: 0.9;
+        }
+
+        .header .authority {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0 0 20px;
+            color: #555;
         }
 
         .detail-section {
-            padding-top: 20px;
-            border-bottom: 1px solid #e5e7eb;
+            padding: 20px 0;
+            border-bottom: 1px solid #EDE0D1; /* Original border color */
         }
 
         .detail-section h2 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 600;
-            color: #1a3c73;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 10px;
+            color: #9F856B; /* Original color */
+            margin-bottom: 15px;
+            border-bottom: 2px solid #EDE0D1; /* Original border color */
+            padding-bottom: 8px;
         }
 
         .detail-row {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
-            padding: 12px;
-            background: #f9fafb;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #FBF7F2; /* Original background color */
+            border: 1px solid #EDE0D1; /* Original border color */
             border-radius: 6px;
-            border: 1px solid #e5e7eb;
         }
 
         .detail-label {
             width: 250px;
             font-weight: 600;
-            color: #1a3c73;
+            color: #3A2E22; /* Slightly darker for better contrast */
             padding: @(isArabic ? "0 0 0 10px" : "0 10px 0 0");
             text-align: @(isArabic ? "right" : "left");
+            font-size: 15px;
         }
 
         .detail-value {
             flex: 1;
-            color: #4b5563;
+            color: #3A2E22; /* Slightly darker for better contrast */
             font-size: 15px;
             text-align: @(isArabic ? "right" : "left");
         }
 
         .table-section {
-            padding-top: 25px;
+            padding: 20px 0;
         }
 
         .table-section h2 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 600;
-            color: #1a3c73;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 10px;
+            color: #9F856B; /* Original color */
+            margin-bottom: 15px;
+            border-bottom: 2px solid #EDE0D1; /* Original border color */
+            padding-bottom: 8px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
-            background: #fff;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            overflow: hidden;
+            margin-top: 10px;
+            border: 2px solid #EDE0D1; /* Thicker border for clarity */
         }
 
         th, td {
-            padding: 14px;
+            padding: 12px;
             text-align: @(isArabic ? "right" : "left");
-            border-bottom: 1px solid #e5e7eb;
+            border: 1px solid #EDE0D1; /* Original border color */
         }
 
         th {
-            background: #f1f3f5;
+            background-color: #F5ECE3; /* Original header background */
             font-weight: 600;
-            color: #1a3c73;
-            font-size: 14px;
-            text-transform: uppercase;
+            color: #3A2E22; /* Slightly darker for contrast */
+            font-size: 15px;
+            text-transform: @(isArabic ? "none" : "uppercase");
         }
 
         td {
-            font-size: 14px;
-            color: #4b5563;
+            font-size: 15px;
+            color: #3A2E22; /* Slightly darker for contrast */
         }
 
         tr:nth-child(even) {
-            background-color: #f9fafb;
-        }
-
-        tr:hover {
-            background-color: #f1f3f5;
-            transition: background-color 0.2s ease;
+            background-color: #FBF7F2; /* Original background color */
         }
 
         .no-data {
             text-align: center;
-            padding: 40px;
-            color: #6b7280;
-            font-size: 16px;
+            padding: 20px;
+            color: #3A2E22; /* Slightly darker for contrast */
+            font-size: 15px;
             font-style: italic;
-            background: #f9fafb;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
+            background: #FBF7F2; /* Original background color */
+            border: 1px solid #EDE0D1; /* Original border color */
+            border-radius: 6px;
+            margin: 15px 0;
         }
 
         .footer {
-            margin-top: 25px;
-            padding: 15px;
-            text-align: @(isArabic ? "left" : "right");
-            font-size: 13px;
-            color: #6b7280;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .footer p {
-            margin: 5px 0;
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #3A2E22; /* Slightly darker for contrast */
+            border-top: 1px solid #EDE0D1; /* Original border color */
         }
 
         .footer .official-notice {
             font-weight: 600;
-            color: #1a3c73;
+            margin-bottom: 5px;
         }
 
+        .footer .reference {
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>@(Model?.ReportTitle ?? (isArabic ? "تقرير التفاصيل مع القائمة" : "Details with List Report"))</h1>
-            @if (Model?.Items != null)
-            {
-                <p>@(isArabic ? "إجمالي العناصر:" : "Total Items:") @Model.Items.Count()</p>
-            }
+            <img src="" alt="DMA Logo" class="logo" loading="eager" />
+            <h1>@(Model?.ReportTitle ?? (isArabic ? "تقرير رسمي" : "Official Report"))</h1>
+            <p class="authority">@(isArabic ? ".............." : "................")</p>
         </div>
 
         <div class="detail-section">
@@ -213,27 +242,40 @@
                 var firstItem = Model.Items.FirstOrDefault();
                 if (firstItem != null)
                 {
-                    <table>
-                        <thead>
-                            <tr>
-                                @foreach (var prop in firstItem.GetType().GetProperties())
-                                {
-                                    <th>@prop.Name</th>
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Items.Take(listLimit))
-                            {
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    @foreach (var prop in item.GetType().GetProperties())
+                                    @foreach (var header in Model.Headers)
                                     {
-                                        <td>@(prop.GetValue(item)?.ToString() ?? (isArabic ? "غير متاح" : "N/A"))</td>
+                                        <th>@header.Value</th>
                                     }
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @if (Model.Items != null && Model.Items.Any())
+                                {
+                                    @foreach (var item in Model.Items)
+                                    {
+                                        <tr>
+                                            @foreach (var header in Model.Headers)
+                                            {
+                                                <td>@((item as Dictionary<string, object>)?.TryGetValue(header.Key, out var value) == true ? value?.ToString() ?? (isArabic ? "غير متاح" : "N/A") : string.Empty)</td>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="@(Model.Headers?.Count ?? 1)" class="text-center">
+                                            @(Model.Lang == "ar" ? "لا توجد بيانات متاحة" : "No data available")
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
             }
             else
@@ -243,7 +285,8 @@
         </div>
 
         <div class="footer">
-            <p class="official-notice">@(isArabic ? "هذا المستند رسمي ويعتبر لاغيًا عند التغيير عليه." : "This document is official and considered void upon modification.")</p>
+            <p class="official-notice">@(isArabic ? "وثيقة رسمية صادرة عن..." : "Official Document Issued by ...")</p>
+            <p>@(isArabic ? "تاريخ الإصدار: " : "Issue Date: ") @DateTime.Now.ToString("dd/MM/yyyy")</p>
         </div>
     </div>
 </body>

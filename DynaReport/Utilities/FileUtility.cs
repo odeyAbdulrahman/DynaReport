@@ -26,14 +26,5 @@ namespace DynaReport.Utilities
                 Console.WriteLine($"DLL file not found in {dllFolder}");
             }
         }
-
-        private static string GetBuildConfiguration()
-        {
-            #if DEBUG
-            return "Debug";
-            #else
-            return "Release";
-            #endif
-        }
     }
 }
